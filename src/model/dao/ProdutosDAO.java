@@ -51,23 +51,26 @@ public class ProdutosDAO {
         return lista;
     }
 
-    // SELECT POR NOME (PK ou identificador lógico)
-    public Produtos selectByNome(String nome, String tabela) {
-        Produtos produto = new Produtos();
+    // SELECT POR NOME (busca parcial)
+    public ArrayList<Produtos> buscarProdutos(String nome, String tabela) {
+        ArrayList<Produtos> lista = new ArrayList<>();
         try {
-            String SQL = "SELECT * FROM " + tabela + " WHERE nome='" + nome + "'";
+            String SQL = "SELECT * FROM " + tabela + " WHERE nome ILIKE '%" + nome + "%'";
             ResultSet rset = s.executeQuery(SQL);
-            if (rset.next()) {
+            while (rset.next()) {
+                Produtos produto = new Produtos();
                 produto.setNome(rset.getString("nome"));
                 produto.setDescricao(rset.getString("descricao"));
                 produto.setValor(rset.getDouble("valor"));
                 produto.setEstoque(rset.getInt("estoque"));
+                lista.add(produto);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return produto;
+        return lista;
     }
+
 
     // UPDATE
     public int atualizarProduto(Produtos produto, String tabela) {

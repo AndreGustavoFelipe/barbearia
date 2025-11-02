@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class UsuariosDAO{
+public class UsuariosDAO {
 
     private Statement s = null;
 
@@ -18,12 +18,12 @@ public class UsuariosDAO{
         int linhasAfetadas = 0;
         try {
             String SQL = "INSERT INTO " + tabela +
-                    " (nome, tipo, endereco, data_nascimento, sexo) VALUES (" +
+                    " (nome, sobrenome, tipo, login, senha) VALUES (" +
                     "'" + usuario.getNome() + "'," +
+                    "'" + usuario.getSobrenome() + "'," +
                     usuario.getTipo() + "," +
-                    "'" + usuario.getEndereco() + "'," +
-                    "'" + usuario.getDataNascimento() + "'," +
-                    "'" + usuario.getSexo() + "')";
+                    "'" + usuario.getLogin() + "'," +
+                    "'" + usuario.getSenha() + "')";
             linhasAfetadas = this.s.executeUpdate(SQL);
             System.out.println("Dados Inseridos: " + linhasAfetadas);
         } catch (Exception e) {
@@ -31,7 +31,6 @@ public class UsuariosDAO{
         }
         return linhasAfetadas;
     }
-
 
     // SELECT TODOS
     public ArrayList<Usuarios> selectUsuarios(String tabela) {
@@ -43,10 +42,10 @@ public class UsuariosDAO{
                 Usuarios usuario = new Usuarios();
                 usuario.setCodigo(rset.getString("codigo"));
                 usuario.setNome(rset.getString("nome"));
+                usuario.setSobrenome(rset.getString("sobrenome"));
                 usuario.setTipo(rset.getInt("tipo"));
-                usuario.setEndereco(rset.getString("endereco"));
-                usuario.setDataNascimento(rset.getString("dataNascimento"));
-                usuario.setSexo(rset.getString("sexo"));
+                usuario.setLogin(rset.getString("login"));
+                usuario.setSenha(rset.getString("senha"));
                 lista.add(usuario);
             }
         } catch (Exception e) {
@@ -64,10 +63,10 @@ public class UsuariosDAO{
             if (rset.next()) {
                 usuario.setCodigo(rset.getString("codigo"));
                 usuario.setNome(rset.getString("nome"));
+                usuario.setSobrenome(rset.getString("sobrenome"));
                 usuario.setTipo(rset.getInt("tipo"));
-                usuario.setEndereco(rset.getString("endereco"));
-                usuario.setDataNascimento(rset.getString("dataNascimento"));
-                usuario.setSexo(rset.getString("sexo"));
+                usuario.setLogin(rset.getString("login"));
+                usuario.setSenha(rset.getString("senha"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,10 +80,10 @@ public class UsuariosDAO{
         try {
             String SQL = "UPDATE " + tabela + " SET " +
                     "nome='" + usuario.getNome() + "', " +
+                    "sobrenome='" + usuario.getSobrenome() + "', " +
                     "tipo=" + usuario.getTipo() + ", " +
-                    "endereco='" + usuario.getEndereco() + "', " +
-                    "dataNascimento='" + usuario.getDataNascimento() + "', " +
-                    "sexo='" + usuario.getSexo() + "' " +
+                    "login='" + usuario.getLogin() + "', " +
+                    "senha='" + usuario.getSenha() + "' " +
                     "WHERE codigo='" + usuario.getCodigo() + "'";
             linhasAfetadas = this.s.executeUpdate(SQL);
             System.out.println("Dados Atualizados: " + linhasAfetadas);
@@ -106,4 +105,38 @@ public class UsuariosDAO{
         }
         return linhasAfetadas;
     }
+
+    // VALIDA USUARIO (login + senha opcional) e retorna o objeto do usuário
+    public Usuarios validaUsuario(String user, String password) {
+        Usuarios usuario = null;
+
+        try {
+            String SQL = "SELECT * FROM USUARIOS WHERE login='" + user.trim() + "'";
+
+            if (password != null && !password.trim().equals("")) {
+                SQL += " AND senha='" + password.trim() + "'";
+            }
+
+            ResultSet rset = s.executeQuery(SQL);
+
+            if (rset.next()) {
+                usuario = new Usuarios();
+                usuario.setCodigo(rset.getString("codigo"));
+                usuario.setNome(rset.getString("nome"));
+                usuario.setSobrenome(rset.getString("sobrenome"));
+                usuario.setTipo(rset.getInt("tipo"));
+                usuario.setLogin(rset.getString("login"));
+                usuario.setSenha(rset.getString("senha"));
+            }
+
+            rset.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return usuario;
+    }
+
+
 }

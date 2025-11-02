@@ -1,7 +1,8 @@
 import controller.validaLogin;
+import controller.Sessao;
 import model.dao.Usuarios;
-import model.dao.UsuariosDAO;
 import view.TelaAdmin;
+import view.TelaCadastro;
 import view.TelaUsuario;
 
 import java.util.Scanner;
@@ -10,45 +11,57 @@ public class Main {
 
     private validaLogin controllerLogin = new validaLogin();
 
-    private void run(){
+    private void run() {
+
         Scanner leia = new Scanner(System.in);
 
-        UsuariosDAO user = new UsuariosDAO("barbearia");
+        while (true) {
+            System.out.println("\n===== MENU PRINCIPAL =====");
+            System.out.println("1. Cadastro");
+            System.out.println("2. Login");
+            System.out.println("3. Sair");
+            System.out.print("Escolha uma opção: ");
 
-        Usuarios u = new Usuarios();
+            String opcao = leia.next();
 
+            switch (opcao) {
+                case "1":
+                    new TelaCadastro().mostrarTela();
+                    break;
 
-        u.setNome("Teste");
-        u.setTipo(1);
-        u.setSexo("M");
-        u.setEndereco("Teste");
-        u.setDataNascimento("08/11/2005");
+                case "2":
+                    System.out.print("Login: ");
+                    String login = leia.next();
+                    System.out.print("Senha: ");
+                    String senha = leia.next();
 
-        int linhas = user.inserirUsuario(u, "usuarios");
+                    Usuarios usuario = controllerLogin.validarEntrada(login, senha);
+                    if (usuario != null) {
+                        Sessao.setUsuarioLogado(usuario);
+                        System.out.println("\nLogin realizado com sucesso!");
+                        System.out.println("Bem-vindo, " + usuario.getNome() + "!");
+                        if (usuario.getTipo() == 0){
+                            new TelaAdmin().sayHello();
+                        } else{
+                            new TelaUsuario().mostrarTela();
+                        }
+                    } else {
+                        System.out.println("Dados incorretos!");
+                    }
+                    break;
 
-//        System.out.println("Digite uma das opções:");
-//        System.out.println("1. Usuario Padrão");
-//        System.out.println("2. Administrador");
-//        System.out.println("3. SAIR");
-//
-//        String opcao = leia.next();
-//        switch (Integer.parseInt(opcao)){
-//            case 1:
-//                if(controllerLogin.validarEntrada("user1","123456")){
-//                    new TelaUsuario().sayHello();
-//                }else{
-//                    System.out.println("Dados incorretos!");
-//                }
-//                break;
-//            case 2: new TelaAdmin().sayHello();
-//                break;
-//            case 3: System.exit(0);
-//                break;
-//            default:
-//                System.out.println("Opção Inválida!");
-//                break;
-//        }
+                case "3":
+                    System.out.println("Encerrando o sistema...");
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+                    break;
+            }
+        }
     }
+
     public static void main(String[] args) {
         new Main().run();
     }

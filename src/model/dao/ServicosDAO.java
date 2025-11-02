@@ -50,20 +50,27 @@ public class ServicosDAO {
     }
 
     // SELECT POR NOME (PK ou identificador lógico)
-    public Servicos selectByNome(String nome, String tabela) {
-        Servicos servico = new Servicos();
+    public ArrayList<Servicos> buscarServicos(String termo, String tabela) {
+        ArrayList<Servicos> lista = new ArrayList<>();
         try {
-            String SQL = "SELECT * FROM " + tabela + " WHERE nome='" + nome + "'";
+            String SQL;
+            if (termo.matches("\\d+")) { // tenta buscar por ID se for número
+                SQL = "SELECT * FROM " + tabela + " WHERE id = " + termo;
+            } else { // busca parcial por nome ou descrição
+                SQL = "SELECT * FROM " + tabela + " WHERE nome ILIKE '%" + termo + "%' OR descricao ILIKE '%" + termo + "%'";
+            }
             ResultSet rset = s.executeQuery(SQL);
-            if (rset.next()) {
+            while (rset.next()) {
+                Servicos servico = new Servicos();
                 servico.setNome(rset.getString("nome"));
                 servico.setDescricao(rset.getString("descricao"));
                 servico.setValor(rset.getDouble("valor"));
+                lista.add(servico);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return servico;
+        return lista;
     }
 
     // UPDATE

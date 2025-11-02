@@ -16,7 +16,7 @@ public class ConexaoDB {
             this.Conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+database,"postgres","postgres");
             this.s = this.Conn.createStatement();
             this.s.execute("SET search_path TO sistema");
-            System.out.println("Conectado ao banco de dados: "+database);
+//            System.out.println("Conectado ao banco de dados: "+database);
         }catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }

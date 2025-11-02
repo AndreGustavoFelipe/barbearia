@@ -1,48 +1,25 @@
 package model.dao;
 
-//Entidade
+// Entidade
 public class Usuarios {
 
-    private String codigo;
+    private String codigo;      // PK, gerado automaticamente pelo banco
     private String nome;
-    private int tipo;
-    private String endereco;
-    private String dataNascimento;
-    private String sexo;
+    private String sobrenome;
+    private int tipo; // 0 -> ADM -- 1 -> Cliente
+    private String login;
+    private String senha;
 
     public Usuarios() {
     }
 
-    public String getSexo() {
-        return sexo;
+    // Getters e Setters
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(String dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public int getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -53,12 +30,35 @@ public class Usuarios {
         this.nome = nome;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getSobrenome() {
+        return sobrenome;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setSobrenome(String sobrenome) {
+        this.sobrenome = sobrenome;
     }
 
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 }
